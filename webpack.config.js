@@ -1,10 +1,17 @@
 const webpack = require('webpack')
-const merge = require('webpack-merge')
 const path = require('path')
 
-var config = {
+module.exports = {
+    entry: path.resolve(__dirname + '/src/main.js'),
     output: {
-        path: path.resolve(__dirname + '/dist/')
+        path: path.resolve(__dirname + '/dist/'),
+        filename: 'vue-clock.min.js',
+        libraryTarget: 'umd',
+        library: 'vue-clock',
+        umdNamedDefine: true
+    },
+    externals: {
+        moment: 'moment'
     },
     module: {
         loaders: [
@@ -24,9 +31,6 @@ var config = {
             }
         ]
     },
-    externals: {
-        moment: 'moment'
-    },
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             minimize: true,
@@ -38,23 +42,3 @@ var config = {
         })
     ]
 }
-
-module.exports = [
-    merge(config, {
-        entry: path.resolve(__dirname + '/src/plugin.js'),
-        output: {
-            filename: 'vue-clock.min.js',
-            libraryTarget: 'window',
-            library: 'VueClock'
-        }
-    }),
-    merge(config, {
-        entry: path.resolve(__dirname + '/src/Clock.vue'),
-        output: {
-            filename: 'vue-clock.js',
-            libraryTarget: 'umd',
-            library: 'vue-clock',
-            umdNamedDefine: true
-        }
-    })
-]
